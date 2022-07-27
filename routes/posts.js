@@ -3,7 +3,6 @@ const Posts = require("../schemas/post");
 
 const router = express.Router();
 
-
 //전체목록조회
 router.get("/posts", async (req, res) => {
     const posts = await Posts.find();

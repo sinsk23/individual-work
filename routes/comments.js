@@ -3,7 +3,6 @@ const Comments = require("../schemas/comment");
 
 const router = express.Router();
 
-
 //댓글목록조회
 router.get("/comments", async(req,res)=>{
     const comments = await Comments.find();
