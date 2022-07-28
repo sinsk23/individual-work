@@ -35,7 +35,7 @@ router.put("/comments/:commentId", async(req, res)=>{
     const fixComment = await Comments.find({ _id : commentId });
     
     if(fixComment.length){
-      
+      if(fixComment.password===password)
       await Comments.updateOne({_id : commentId} , {$set:{ password,user,content }});
     }
     res.json({ message : "수정된 댓글입니다." });
@@ -44,11 +44,14 @@ router.put("/comments/:commentId", async(req, res)=>{
 //삭제
 router.delete("/comments/:commentId", async (req, res) => {
     const { commentId } = req.params;
-    const deleteComment = await Comments.find({ _id : commentId });
+    const { password } = req.body;
     
-    if(deleteComment.length){
-      
-        await Comments.deleteOne({_id : commentId});
+    const deleteComment = await Comments.findOne({ _id : commentId });
+    
+    if(deleteComment){
+      // console.log(deleteComment)
+      if(deleteComment.password===password)  
+      await Comments.deleteOne({_id : commentId});
       }
     res.json({ message: "댓글을 삭제했습니다." });
     });

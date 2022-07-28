@@ -53,22 +53,28 @@ router.put("/posts/:postId", async(req, res)=>{
   
     const fixPost = await Posts.find({ _id : postId });
     
+    
     if(fixPost.length){
-      
-      await Posts.updateOne({_id : postId} , {$set:{ password,title,content }});
+      if(fixPost.password===password)
+      await Posts.updateOne({_id : postId} , {$set:{ password,title,content }});      
     }
     res.json({ message : "게시글을 수정했습니다." });
+    
+    
   });
 
 //삭제
 router.delete("/posts/:postId", async (req, res) => {
     const { postId } = req.params;
-    const deletePost = await Posts.find({ _id : postId });
+    const { password } = req.body;
     
-    if(deletePost.length){
-      
-        await Posts.deleteOne({_id : postId});
-      }
+    const deletePost = await Posts.findOne({ _id : postId });
+    
+    if(deletePost){
+        
+      if(deletePost.password===password)
+      await Posts.deleteOne({ _id : postId });
+    }
     res.json({ message: "게시글을 삭제했습니다." });
     });
 
